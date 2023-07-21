@@ -218,6 +218,8 @@ inline bool isMsysPty(int fd) noexcept
 
 #endif
 
+inline bool g_is_forced_tty = std::getenv("IS_TTY");
+
 inline bool isTerminal(const std::streambuf *osbuf) noexcept
 {
 using std::cerr;

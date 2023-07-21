@@ -1141,6 +1141,13 @@ bool Group::LearnMembers() {
 		return false;
 	}
 
+	for(int i = 0; i < MAX_GROUP_MEMBERS; ++i)
+	{
+		members[i] = nullptr;
+		memset(membername[i],0,64);
+		MemberRoles[i] = 0;
+	}
+
 	int memberIndex = 0;
     for(auto row = results.begin(); row != results.end(); ++row) {
 		if(!row[0])

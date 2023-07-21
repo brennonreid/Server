@@ -693,7 +693,7 @@ int64 Client::CalcBaseMana()
 int64 Client::CalcBaseManaRegen()
 {
 	uint8 clevel = GetLevel();
-	int32 regen = 0;
+	int64 regen = 0;
 	if (IsSitting() || (GetHorseId() != 0)) {
 		if (HasSkill(EQ::skills::SkillMeditate)) {
 			regen = (((GetSkill(EQ::skills::SkillMeditate) / 10) + (clevel - (clevel / 4))) / 4) + 4;
@@ -710,7 +710,7 @@ int64 Client::CalcBaseManaRegen()
 
 int64 Client::CalcManaRegen(bool bCombat)
 {
-	int regen = 0;
+	int64 regen = 0;
 	auto level = GetLevel();
 	// so the new formulas break down with older skill caps where you don't have the skill until 4 or 8
 	// so for servers that want to use the old skill progression they can set this rule so they
@@ -732,9 +732,9 @@ int64 Client::CalcManaRegen(bool bCombat)
 				}
 			}
 			if (old)
-				regen = std::max(regen, 2);
+				regen = std::max(regen, static_cast<int64>(2));
 		} else if (old) {
-			regen = std::max(regen, 1);
+			regen = std::max(regen, static_cast<int64>(1));
 		}
 	}
 
@@ -852,10 +852,10 @@ uint32 Client::CalcCurrentWeight()
 
 int32 Client::CalcAlcoholPhysicalEffect()
 {
-	if (m_pp.intoxication <= 55) {
+	if (GetIntoxication() <= 55) {
 		return 0;
 	}
-	return (m_pp.intoxication - 40) / 16;
+	return (GetIntoxication() - 40) / 16;
 }
 
 int32 Client::CalcSTR()
@@ -933,8 +933,8 @@ int32 Client::CalcINT()
 	int32 val = m_pp.INT + itembonuses.INT + spellbonuses.INT;
 	int32 mod = aabonuses.INT;
 	INT = val + mod;
-	if (m_pp.intoxication) {
-		int32 AlcINT = INT - (int32)((float)m_pp.intoxication / 200.0f * (float)INT) - 1;
+	if (GetIntoxication()) {
+		int32 AlcINT = INT - (int32)((float)GetIntoxication() / 200.0f * (float)INT) - 1;
 		if ((AlcINT < (int)(0.2 * INT))) {
 			INT = (int)(0.2f * (float)INT);
 		}
@@ -957,8 +957,8 @@ int32 Client::CalcWIS()
 	int32 val = m_pp.WIS + itembonuses.WIS + spellbonuses.WIS;
 	int32 mod = aabonuses.WIS;
 	WIS = val + mod;
-	if (m_pp.intoxication) {
-		int32 AlcWIS = WIS - (int32)((float)m_pp.intoxication / 200.0f * (float)WIS) - 1;
+	if (GetIntoxication()) {
+		int32 AlcWIS = WIS - (int32)((float)GetIntoxication() / 200.0f * (float)WIS) - 1;
 		if ((AlcWIS < (int)(0.2 * WIS))) {
 			WIS = (int)(0.2f * (float)WIS);
 		}
